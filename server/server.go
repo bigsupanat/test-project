@@ -13,7 +13,7 @@ type Server struct {
 func NewServer(svc service.Service) *Server {
 	r := gin.Default()
 
-	r.GET("/covid/summary", getCovidSummary)
+	r.GET("/covid/summary", getCovidSummaryFn(svc))
 
 	return &Server{
 		router:  r,
