@@ -15,7 +15,7 @@ type Connection interface {
 	Request(url string) (resp *http.Response, err error)
 }
 
-func InitClient() Connection {
+func Init() Connection {
 	return Client{
 		Timeout: time.Duration(time.Second * TIMEOUT),
 	}
