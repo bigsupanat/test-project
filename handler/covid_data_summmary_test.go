@@ -13,48 +13,51 @@ import (
 type mockService1 struct{}
 
 func (s mockService1) Request(url string) (resp *http.Response, err error) {
-	mockResponse := `{
-		"Data":[
-		   {
-			  "ConfirmDate":"2021-05-04",
-			  "No":null,
-			  "Age":51,
-			  "Gender":"หญิง",
-			  "GenderEn":"Female",
-			  "Nation":null,
-			  "NationEn":"China",
-			  "Province":"Phrae",
-			  "ProvinceId":46,
-			  "District":null,
-			  "ProvinceEn":"Phrae",
-			  "StatQuarantine":5
-		   },
-		   {
-			"ConfirmDate":"2021-05-01",
-			"No":null,
-			"Age":51,
-			"Gender":"ชาย",
-			"GenderEn":"Male",
-			"Nation":null,
-			"NationEn":"India",
-			"Province":"Suphan Buri",
-			"ProvinceId":65,
-			"District":null,
-			"ProvinceEn":"Suphan Buri",
-			"StatQuarantine":8
-		 	}
-		]
-	}`
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, mockResponse)
-	}))
-	defer ts.Close()
-	return http.Get(ts.URL)
+	if url == "http://static.wongnai.com/devinterview/covid-cases.json" {
+		mockResponse := `{
+			"Data":[
+			   {
+				  "ConfirmDate":"2021-05-04",
+				  "No":null,
+				  "Age":51,
+				  "Gender":"หญิง",
+				  "GenderEn":"Female",
+				  "Nation":null,
+				  "NationEn":"China",
+				  "Province":"Phrae",
+				  "ProvinceId":46,
+				  "District":null,
+				  "ProvinceEn":"Phrae",
+				  "StatQuarantine":5
+			   },
+			   {
+				"ConfirmDate":"2021-05-01",
+				"No":null,
+				"Age":51,
+				"Gender":"ชาย",
+				"GenderEn":"Male",
+				"Nation":null,
+				"NationEn":"India",
+				"Province":"Suphan Buri",
+				"ProvinceId":65,
+				"District":null,
+				"ProvinceEn":"Suphan Buri",
+				"StatQuarantine":8
+				 }
+			]
+		}`
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprint(w, mockResponse)
+		}))
+		defer ts.Close()
+		return http.Get(ts.URL)
+	}
+	return nil, fmt.Errorf("URL Not Found")
 }
 
 func TestGetJsonData(t *testing.T) {
 	mocksvc := mockService1{}
-	url := ""
+	url := "http://static.wongnai.com/devinterview/covid-cases.json"
 	actual := obj.CovidDataRequest{}
 
 	expected := obj.CovidDataRequest{
