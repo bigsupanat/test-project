@@ -23,12 +23,8 @@ func CovidSummary(svc RequestService) obj.CovidDataSummaryResponse {
 	}
 	sumProvince := make(map[string]int)
 	sumAge := map[string]int{"0-30": 0, "31-60": 0, "61+": 0, "N/A": 0}
-	for _, data := range req.Data {
-		if _, ok := sumProvince[data.ProvinceEn]; ok {
-			sumProvince[data.ProvinceEn]++
-		} else {
-			sumProvince[data.ProvinceEn] = 1
-		}
+	for _, data := range req.Datas {
+		sumProvince[data.ProvinceEn]++
 		if data.Age <= 30 {
 			sumAge["0-30"]++
 		} else if data.Age <= 60 {
@@ -60,10 +56,10 @@ func getJsonData(svc RequestService, url string, req *obj.CovidDataRequest) erro
 		log.Println("Error Read Body")
 		return err
 	}
-	err = ioutil.WriteFile("../covid-cases.json", byt, 0644)
-	if err != nil {
-		log.Println("Error Write File")
-		return err
-	}
+	// err = ioutil.WriteFile("../covid-cases.json", byt, 0644)
+	// if err != nil {
+	// 	log.Println("Error Write File")
+	// 	return err
+	// }
 	return json.Unmarshal(byt, req)
 }
